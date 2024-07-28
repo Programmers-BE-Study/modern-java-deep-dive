@@ -14,14 +14,14 @@
  - 모든 객체를 담기 위해서 필드를 Object Type으로 선언 
  - 객체를 저장하는 set() 메서드와 저장한 객체를 반환하는 get()메서드를 구현.
 ```
-  public class Box<T> {
-    private T object;
+  public class Box {
+    private Object object;
 
-    public void set(T object) {
+    public void set(Object object) {
         this.object = object;
     }
 
-    public T get() {
+    public Object get() {
         return object;
     }
 }
