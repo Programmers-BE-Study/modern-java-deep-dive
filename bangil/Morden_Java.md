@@ -135,6 +135,7 @@ Arrays.sort(students, (o1,o2) -> o2.getName()-o1.getName());
 
  Stream<String> arrStream = Arrays.stream(names); //배열에서 스트림 생성해내기
 ```
+240725작성
 
 
   [출처]
