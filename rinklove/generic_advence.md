@@ -7,39 +7,24 @@
 ## 1. 제네릭 상속
 ### 배경
 앞에서 제네릭 문법을 적용한 Box클래스를 생각해보자.<br>
-Box 인스턴스를 생성할 때 정의할 수 있는 파라미터는 모든 타입이 가능.<br><br>
+<img width="260" alt="image" src="https://github.com/user-attachments/assets/601d59c6-f047-47d4-8d6f-0c99dbe0d46f">
+
+Box 인스턴스를 생성할 때 정의할 수 있는 파라미터는 모든 타입이 가능.<br>
 그렇다면 실제로는 이렇게 쓰일 리는 없지만, 이런 코드도 컴파일 에러 없이 정상적으로 수행이 가능하다.
 ```
 public static void main(String[] args) {
-    Box<Map<String, List<Box>>> box = new Box<>();
+    Box<Map<String, List<Box<?>>>> box = new Box<>();
 }
 ```
 **이 코드에서 느낀 문제점**
-중첩된 제네릭의 사용으로 가독성 저하 + box 인스턴스의 명확하지 않은 역할.
-→ 제네릭의 원래 사용 의도와도 많이 다를 뿐더러, 개발자 입장에서도 사용하기 버거울 것임.
+> 중첩된 제네릭의 사용으로 가독성 저하 + box 인스턴스의 명확하지 않은 역할.<br>
+> → 제네릭의 원래 사용 의도와도 많이 다를 뿐더러, 개발자 입장에서도 사용하기 버거울 것임.
 
 ### 제네릭 상속 - extends
-그렇다면 이러한 문제를 해결하기 위한 방법이 바로 **클래스 단위에서 정의할 수 있는 제네릭 타입 파라미터를 상속으로 제한**하는 것이다.<br>
+위 코드의 문제를 해결하기 위한 방안이 바로 **클래스 단위에서 정의할 수 있는 제네릭 타입 파라미터를 상속으로 제한**하는 것이다.<br>
 이번엔 Box에 선언할 수 있는 타입 파라미터를 Number 클래스를 상속받은 클래스로 제한했다.
-```
-public class Box<T extends Number> {
-    private T object;
-    public void set(T object) {
-        this.object = object;
-    }
-    public T get() {
-        return object;
-    }
+<img width="575" alt="image" src="https://github.com/user-attachments/assets/68140117-2c88-4ae7-aedc-e75f8b81e865">
 
-    public static void main(String[] args) {
-        Box<Map<String, List<Box>>> box = new Box<>();  //compile Error!
-        Box<Integer> integerBox = new Box<>();
-        Box<Long> longBox = new Box<>();
-        Box<Boolean> booleanBox = new Box<>();  //compile Error!
-        Box<String> stringBox = new Box<>();    //compile Error!
-    }
-}
-```
 제네릭을 상속으로 제한함으로써 기존에 역할이 명확하지 않았던 Box클래스가 숫자 객체를 저장하는 클래스로 역할이 명확해졌다.
 
 <br>
@@ -100,9 +85,7 @@ class GenericMain {
 <img width="330" alt="image" src="https://github.com/user-attachments/assets/f3898f1b-ce26-4343-9b4c-0be17b795923">
 
 getList() 메서드에서 ```List<Object>```타입의 객체를 받겠다고 했는데, 메인 메서드에서 ```List<String>```타입 객체를 전달하면 컴파일 에러.<br>
-→ getList 오버로딩<br>
-
-⇢ 제네릭 타입이 다른 리스트를 매개변수로 전달할 때마다 getList()를 오버로딩해야함<br>
+⇢ 제네릭 타입이 다른 리스트를 매개변수로 전달할 때마다 getList()를 새로 정의해야함<br>
 ⇢ 객체지향스러운 설계x<br>
 **그래서 이를 보완하기 위해 등장한 개념이 와일드 카드임**
 
@@ -111,6 +94,7 @@ getList() 메서드에서 ```List<Object>```타입의 객체를 받겠다고 했
 ```와일드 카드를 통해서 제네릭이 공변성, 반공변성 성질을 가질 수 있게됨```<br>
 와일드 카드는 아래의 코드 처럼 사용할 수 있음.
 ```
+1.
 abstract class ReferencePipeline<P_IN, P_OUT>
         extends AbstractPipeline<P_IN, P_OUT, Stream<P_OUT>>
         implements Stream<P_OUT>  {
@@ -121,6 +105,7 @@ abstract class ReferencePipeline<P_IN, P_OUT>
     }
 }
 
+2.
 public interface Stream<T> extends BaseStream<T, Stream<T>> {
     //중략
     <R> Stream<R> map(Function<? super T, ? extends R> mapper);
@@ -132,7 +117,68 @@ public interface Stream<T> extends BaseStream<T, Stream<T>> {
 | ```<?>``` | 비한정적 와일드 카드(<br>Unbounded Wildcard) | 제한없이 모든 타입이 가능<br><? extends Object>와 동일 |
 | ```<? super P_OUT>``` | 상한 경계 와일드 카드<br>(Upper bounded Wildcard) | 상속 관계에 있는 클래스 중에서 하위 클래스를 제한<br>(P_OUT과 P_OUT의 상위 클래스들만 가능) |
 | ```<? extends R>``` | 하한 경계 와일드 카드<br>(Lower bounded Wildcard) | 상속 관계에 있는 클래스 중에서 상위 클래스를 제한<br>(P_OUT과 P_OUT의 하위 클래스들만 가능) |
-| ```<R>``` | 제네릭 네이밍 파라미터 | 호출될 때 구체적인 타입으로 결정되는 제네릭 타입 파라미터를 정의<br>메서드의 반환 타입이나 매개변수 타입에 영향 |
+| ```<R>``` | 제네릭 네이밍 파라미터<br>(Generic Naming Parameter) | 호출될 때 구체적인 타입으로 결정되는 제네릭 타입 파라미터를 정의<br>메서드의 반환 타입이나 매개변수 타입에 영향 |
+
+
+### 활용 용도
+**와일드카드를 사용하지 않을 경우**
+```
+public class Advenced {
+
+    public void printInteger(List<Integer> lists) {} 
+    public void printLong(List<Long> lists) {}
+    public void printFloat(List<Float> lists) {}
+
+    public static void main(String[] args) {
+        Advenced a = new Advenced();
+        List<Integer> ints = new ArrayList<>();
+        List<Long> longs = new ArrayList<>();
+        List<Float> floats = new ArrayList<>();
+
+        a.printInteger(ints);
+        a.printLong(ints);    //Complie Error!
+        a.printFloat(ints);    //Complie Error!
+
+        a.printInteger(longs);    //Complie Error!
+        a.printLong(longs);
+        a.printFloat(longs);    //Complie Error!
+
+        a.printInteger(floats);    //Complie Error!
+        a.printLong(floats);    //Complie Error!
+        a.printFloat(floats);
+    }
+}
+```
+**와일드카드를 사용할 경우**
+> 코드의 재사용성 증가
+```
+public class Advenced {
+
+    public void printNumbers(List<? extends Number> lists) {}
+
+    public static void main(String[] args) {
+        Advenced a = new Advenced();
+        List<Integer> ints = new ArrayList<>();
+        List<Long> longs = new ArrayList<>();
+        List<Float> floats = new ArrayList<>();
+        
+        a.printNumbers(ints);
+        a.printNumbers(longs);
+        a.printNumbers(floats);
+    }
+}
+```
+
+## 요약 및 회고
+1. 제네릭 상속와 와일드 카드는 타입 안정성이라는 공통의 이점을 가지고 있지만 **엄연히 다른 개념**
+2. 제네릭 상속은 관리할 객체의 타입을 제한하여 타입 안정성을 강화함.<br>
+   클래스 레벨에서 작성하며, extends를 사용
+3. 와일드 카드는 무공변성인 제네릭을 변성화하여 마치 객체지향의 다형성처럼 사용할 수 있게 함.<br>
+   메서드 선언부나 매개변수에서 작성하며, ?, super, extends를 사용
+4. 제네릭을 적절히 활용하는 사람이 진짜 개발 잘하는 사람이지 않을까라는 생각이 들었음.
+
+## 공부 예정
+- 와일드 카드의 경계 범위 (+ ⍺)
 
 ## References
 https://grey920.github.io/server/java-covariant/ (공변성, 반공변성)<br>
