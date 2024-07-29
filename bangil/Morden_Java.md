@@ -34,7 +34,7 @@ int main(){
     D-->A 
 ```
 
-#### 그래서 함수형 프로그래밍이 뭔데?
+## 그래서 함수형 프로그래밍이 뭔데?
 : `부수효과`를 없애고 `순수 함수`를 만들어 모듈화 수준을 높이는 프로그래밍 패러다임
 
 `부수효과` : 주어진 값 이외의 외부 변수 및 프로그램 실행에 영향을 끼치지 않아야 된다는 의미 ==> 만족하는 함수를 `순수 함수`라고 함
@@ -74,7 +74,7 @@ myList.Stream()
 ```
 어떻게 보면 Stream으로 임시 타입 변경해서 메소드 떡칠 같은 느낌..
 
-#### 1급 객체란
+## 1급 객체란
 > 특정 언어의 일급 객체(first-class citizens, 1급 값, 1급 엔티티, 1급 시민)이라 함은 컴퓨터 프로그래밍 언어 디자인에서 일반적으로 다른 객체들에 적용 가능한 연산을 모두 지우너하는 객체를 가리킨다.   
 > 
 > 1급 객체(First class object)란 다음과 같은 조건을 만족하는 객체이다
@@ -86,6 +86,57 @@ myList.Stream()
 > - 기존 데이터의 불변성
 
   
+## 익명 클래스
+
+```
+//매개변수로 냅다 new 익명클래스 넣어버리기
+Arrays.sort(students, new Comparater<Studetn>()){
+    @Override
+    public int compare(Student o1, Student o2){
+        return o1.getName().compareTo(o2.getName());
+    }
+});
+
+//람다식
+Arrays.sort(students, (o1,o2) -> o2.getName()-o1.getName());
+
+```
+  안드로이드 개발에서 부터 함수형 프로그래밍을 자주 사용하기 시작했다?  
+  -> 기능별로 중점적으로 개발, 하지만 하나 하나 객체를 만들어서 따로 파일을 빼는 행위는 비효율적 -> 함수형 프로그래밍 도입 -> 아 근데 뭐 이렇게 기냐? -> 람다식 등장
+
+
+## 람다 
+
+
+- 람다는 무명 클래스로 메소드 하나짜리 객체를 매번 정의해야 하는 상황에서 태어남 
+- (매개변수) -> {메소드 실행문} 이지만 
+- 매개변수가 하나이면 소괄호 생략 가능
+- 메소드 실행문이 return 한 문장이면 중괄호와 return 키워드 생략 가능
+
+```
+    Arrays.sort(students,(o1,o2) ->{
+        int num = 100; //함다도 하나의 메소드라서 안에서 필요한 변수 만들어 쓰는건 OK
+        sout("이름으로 정렬중!");
+        student = new Student[10]; // 이건 안돼 밖에 있는 데이터는 변경 X 
+        //근데 또 클래스 멤버면 가능 , 객체 안에 계속 유지되는 변수 가능..
+        return o1.getName().compareTo(o2.getName());
+    });
+```
+
+## Steam API
+
+어떠한 입력 데이터(생성된 스트림)를 가지고 필요한 과정을 거치면서 아웃풋 데이터를 생성 -> 그 과정에서 원본을 변경하지는 않음 -> 원하는 데이터를 생성 
+
+==> 일회용, 내부 반복으로 작업 
+
+```
+ String [] names = {"yangyu", "yechan", "hyunsub", "minwoo"};
+ List<String> list = Arrays.asList(names);
+
+ Stream<String> arrStream = Arrays.stream(names); //배열에서 스트림 생성해내기
+```
+240725작성
+
 
   [출처]
 
@@ -96,4 +147,3 @@ myList.Stream()
 [T-stroy2](https://swiftymind.tistory.com/108/)
 
 
-## 람다식 
