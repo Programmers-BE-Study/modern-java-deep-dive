@@ -105,3 +105,11 @@ Login k = new KakaoLogin();
 
 [참고 사이트] https://refactoring.guru/ko 
 
+# Interface 이갸기 
+## 1. Interface의 기능 
+
+## 2. default Method 기능 
+
+## 3. Funtional Method
+
+## 4. Lambda 표현식 
