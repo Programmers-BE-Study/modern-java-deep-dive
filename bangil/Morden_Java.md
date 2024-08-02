@@ -268,7 +268,6 @@ interface Test{
 
  Stream<String> arrStream = Arrays.stream(names); //배열에서 스트림 생성해내기
 ```
-240725작성
 
 
   [출처]
