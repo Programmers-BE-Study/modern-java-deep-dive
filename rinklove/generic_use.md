@@ -36,9 +36,65 @@ public static Path copy(Path source, Path target, CopyOption... options)
 > - 외부에서 온 데이터를 **생산(```P```roducer)** 한다면 <? ```e```xtends T> 를 사용 (하위타입으로 제한)
 > - 외부에서 온 데이터를 **소비(```C```onsumer)** 한다면 <? ```s```uper T> 를 사용 (상위타입으로 제한)
 
-Example
+### Example
+- CustomList의 생성자에서 매개변수로 받는 collections에는 필드변수인 animals에 카피할 데이터를 제공하므로 **"In Variable"**임.
+- clone()의 매개변수인 destination은 animals에 저장된 데이터를 복사해서 clone()를 호출한 메서드로 이동하므로, **"Out Variable"**임
+```
+interface Animal {}
+class Dog implements Animal {}
+class Cat implements Animal {}
+class Lamb implements Animal {}
+
+class CustomList<T> {
+    Object[] animals;
+
+    CustomList(Collection<? extends T> collections) {
+        animals = new Object[collections.size()];
+        int index = 0;
+        for (T element : collections) {
+            animals[index++] = element;
+        }
+    }
+
+    public void clone(Collection<? super T> destination) {
+        for (Object animal : animals) {
+            destination.add((T) animal);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        //랜덤 동물 인스턴스 생성 후 CustomList에 저장
+        List<Animal> animals = getRandomList();
+
+        CustomList<Animal> customList = new CustomList<>(animals);
+        for (Object animal : customList.animals) {
+            System.out.println(animal.getClass().getSimpleName());
+        }
+
+        ArrayList<Animal> dest = new ArrayList<>();
+        customList.clone(dest);
+
+        //custom리스트에 있는 인스턴스를 클론
+        System.out.println();
+        for (Animal animal : dest) {
+            //clone해온 객체를 가지고 작업 가능
+        }
+    }
+
+    private static List<Animal> getRandomList() {
+        List<Animal> list = new ArrayList<>();
+        for(int i = 0; i < 6; i++) {
+            Animal[] select = {new Cat(), new Dog(), new Lamb()};
+            int random_index = (int)(Math.random() * 3);
+            list.add(select[random_index]);
+        }
+        return list;
+    }
+}
 ```
 
-```
-
-
+### 요약
+- 하한 경계 와일드카드는 다양한 하위 클래스 타입의 인스턴스를 복사(저장)하는 데 사용.
+- 상한 경계 와일드카드는 복사된 인스턴스를 외부에서 사용하기 위해 사용.
