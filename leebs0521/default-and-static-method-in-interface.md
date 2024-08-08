@@ -28,7 +28,7 @@
 
 ```java
 public interface Loggable {
-	  // 추상 메서드: 로그 기록
+	// 추상 메서드: 로그 기록
     void log(String message);
 
     // 디폴트 메서드: 로그 메시지 포맷
@@ -116,9 +116,9 @@ import java.util.ArrayList;
 
 public interface CollectionUtils {
 
-		static void staticMethod(){
-			System.out.println("CollectionUtils: method");
-		}
+    static void staticMethod(){
+        System.out.println("CollectionUtils: method");
+    }
 		
     // 정적 메서드: 리스트를 역순으로 반환
     static <T> List<T> reverseList(List<T> list) {
@@ -143,11 +143,11 @@ public interface CollectionUtils {
     import java.util.ArrayList;
     
     public class CollectionUtilsImpl implements CollectionUtils {
-    		// -> 가능
-    		// CollectionUtilsImpl.staticMethod() 호출
-    		static void staticMethod(){
-    			System.out.println("CollectionUtilsImpl: method"); 
-    		}
+        // -> 가능
+        // CollectionUtilsImpl.staticMethod() 호출
+        static void staticMethod(){
+            System.out.println("CollectionUtilsImpl: method"); 
+        }
     			
     			// -> 컴파일 에러
     //		@Overriding
