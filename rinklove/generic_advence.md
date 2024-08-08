@@ -115,8 +115,8 @@ public interface Stream<T> extends BaseStream<T, Stream<T>> {
 | 와일드 카드 종류 | 네이밍 | 설명 | 
 | :---: | :---: | :---: |
 | ```<?>``` | 비한정적 와일드 카드(<br>Unbounded Wildcard) | 제한없이 모든 타입이 가능<br><? extends Object>와 동일 |
-| ```<? super P_OUT>``` | 상한 경계 와일드 카드<br>(Upper bounded Wildcard) | 상속 관계에 있는 클래스 중에서 하위 클래스를 제한<br>(P_OUT과 P_OUT의 상위 클래스들만 가능) |
-| ```<? extends R>``` | 하한 경계 와일드 카드<br>(Lower bounded Wildcard) | 상속 관계에 있는 클래스 중에서 상위 클래스를 제한<br>(P_OUT과 P_OUT의 하위 클래스들만 가능) |
+| ```<? super P_OUT>``` | 하한 경계 와일드 카드<br>(Upper bounded Wildcard) | 상속 관계에 있는 클래스 중에서 하위 클래스를 제한<br>(P_OUT과 P_OUT의 상위 클래스들만 가능) |
+| ```<? extends R>``` | 상한 경계 와일드 카드<br>(Lower bounded Wildcard) | 상속 관계에 있는 클래스 중에서 상위 클래스를 제한<br>(P_OUT과 P_OUT의 하위 클래스들만 가능) |
 | ```<R>``` | 제네릭 네이밍 파라미터<br>(Generic Naming Parameter) | 호출될 때 구체적인 타입으로 결정되는 제네릭 타입 파라미터를 정의<br>메서드의 반환 타입이나 매개변수 타입에 영향 |
 
 
