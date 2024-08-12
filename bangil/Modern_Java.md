@@ -258,17 +258,54 @@ interface Test{
 
 ## Steam API
 
-어떠한 입력 데이터(생성된 스트림)를 가지고 필요한 과정을 거치면서 아웃풋 데이터를 생성 -> 그 과정에서 원본을 변경하지는 않음 -> 원하는 데이터를 생성 
+- 데이터의 연속
+- System.in / System.out ) 스트림
+- Collections.stream()을 제공
+- filter, map, forEach 같은 고차함수(함수를 인자로 받는 함수) 제공
+- Stream을 만들 때는 Stream.generate와 Steram.iterate로 만둘 수 있다
+- Stream을 사용하면 연속된 데이터에 대해서 강력하고 풍부한 고차함수들을 사용하여 강력한 기능을 간결하게 표현할 수 있다.
 
-==> 일회용, 내부 반복으로 작업 
+==> 스트림을 이용하면 선언형(더 간결하고 가독성이 좋도록)으로 `컬렉션 데이터`를 처리할 수 있다.
 
+![alt text](image.png)
+
+
+```java
+    //연속된 값임
+    Stream.generate(()->1).forEach(System.out::println);
+
+     // 0~200 사이 값 중에서 랜덤값 5개를 뽑아 순서대로 표시
+        int [] arr = Stream.generate(()->rand.nextInt(100)+1) 
+                .limit(5).sorted(Comparator.reverseOrder())
+                .mapToInt(i -> i).toArray();
+
+        System.out.println(Arrays.toString(arr));
 ```
- String [] names = {"yangyu", "yechan", "hyunsub", "minwoo"};
- List<String> list = Arrays.asList(names);
 
- Stream<String> arrStream = Arrays.stream(names); //배열에서 스트림 생성해내기
-```
+stream은 `데이터 처리 연산`을 지원하도록 `소스`에서 `연속된 요소`로 정의할 수 있다.
+- 데이터처리 연산
+  - 스트림은 함수형프로그래밍 언어에서 일반적으로 지원하는 연산과 데이터베이스와 비슷한 연산을 지원 
+  - 데이터를 순차적으로 또는 `병렬`로 실행할 수 있따.
+  - filter, map, reduce, find, math, sort
+- 소스
+  - 스트림은 컬렉션, 배열, I/O 자원등의 데이터 제공 소스로부터 데이터를 소비한다.
+  - 정렬된 컬렉션으로 스트림을 생성하면 정렬이 그대로 유지된다
+    - 리스트로 스트림을 만들면 스트림의 요소는 리스트의 요소와 같은 순서를 유지한다.
+- 연속된 요소
+  - 컬렉션과 마찬가지로 스트림은 특정 요소 형식으로 이루어진 연속된 값 집합의 인터페이스를 제공
+  - 컬렉션은 자료구조이므로 시간과 공간의 복잡성과 관련된 요소 저장 및 접근 연산이 주로 이룸
+  - 스트림은 filter, map, sorted처럼 표현 계산식이 주를 이룸
+  - 컬렉션의 주제는 `데이터` 
+  - 스트림의 주제는 `계산`
 
+## Optional 
+- Null Pointer Exception - 가장 많이 발생하는 에러중의 하나
+- 자바에서는 (거의) 모든 것이 래퍼런스 ==> 모든 것이 null이 될 수 있다.
+- 항상 null을 확인할 필요가 있다.
+
+
+- null 쓰지말자 약속 : 계약한다 : 계약을 하고 프로그래밍 한다..?
+- 
 
   [출처]
 
